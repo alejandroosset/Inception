@@ -1,0 +1,22 @@
+FROM debian:bookworm
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends nginx openssl && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /etc/nginx/ssl && \
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/nginx/ssl/inception.key \
+    -out /etc/nginx/ssl/inception.crt \
+    -subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=42/CN=aosset-o.42.fr"
+
+RUN rm -f /etc/nginx/sites-enabled/default
+
+COPY conf/inception.conf /etc/nginx/conf.d/inception.conf
+
+# Pagina temporal (quitar cuando docker sea util)
+RUN echo "<h1>Inception OK </h1>" > /var/www/html/index.html
+
+EXPOSE 443
+
+CMD ["nginx", "-g", "daemon off;"]
