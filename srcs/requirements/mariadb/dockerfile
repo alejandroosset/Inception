@@ -1,14 +1,20 @@
+# Esto se repite en todos es la penultima version estable de debian
 FROM debian:bookworm
 
+# Actualiza los paquetes, instala MariaDB sin paquetes adicionales y borra la cache
 RUN apt-get update &&\
     apt-get install -y --no-install-recommends mariadb-server &&\
     rm -rf /var/lib/apt/lists/*
 
+# Copia el contenido de mis archivos a los que usa mariadb
 COPY conf/99-inception.cnf /etc/mysql/mariadb.conf.d/99-inception.cnf
 COPY tools/init.sh /init.sh
 
+# Le da permisos de ejecucion a init.sh
 RUN chmod +x /init.sh
 
+# Documenta el puerto que va a usar MariaDB pero no lo expone eso se hace en el .cnf
 EXPOSE 3306
 
+# Ejecuta todo lo que hay en el .sh
 CMD ["/init.sh"]
