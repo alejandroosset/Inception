@@ -15,7 +15,7 @@ RUN mkdir -p /etc/nginx/ssl && \
     -out /etc/nginx/ssl/inception.crt \
     -subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=42/CN=aosset-o.42.fr"
 
-# Elimina e; archhivo por defecto de nginx en el que escucha por el puerto 80
+# Elimina el archhivo por defecto de nginx en el que escucha por el puerto 80
 RUN rm -f /etc/nginx/sites-enabled/default
 
 # Copia e contenido de mis archivos en los que usa nginx
