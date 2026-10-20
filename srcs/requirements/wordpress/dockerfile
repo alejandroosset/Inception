@@ -7,15 +7,24 @@ RUN apt-get update && \
         mariadb-client curl ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
+# Descarga WP-CLI desde github y lo guarda en una carpeta, luego le da permisos de ejecución al archivo permitiendo usarlo como wp
 RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x /usr/local/bin/wp
 
+# Copia la configuración de php en la imagen de docker
 COPY conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
+
+# Copia el script de inicialización de wordpress en la imagen
 COPY tools/setup.sh /setup.sh
+
+# Hace ejecutable setup.sh y crea la carpeta si no existe
 RUN chmod +x /setup.sh && mkdir -p /var/www/html
 
+# Establece la carpeta como directorio por defecto para los comandos posteriores
 WORKDIR /var/www/html
 
+# Documenta el puerto que va a usar wordpress pero no lo expone eso se hace en el .cnf
 EXPOSE 9000
 
+# Define setup.sh como comando principal que se ejecutará al iniciar el contenedor
 CMD ["/setup.sh"]

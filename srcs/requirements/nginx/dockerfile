@@ -5,23 +5,23 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends nginx openssl && \
     rm -rf /var/lib/apt/lists/*
 
-# mkdir -p Crea la carpeta para los certificados -p sirve para que si ya existe no falle
+# mkdir -p Crea la carpeta para los certificados, -p sirve para que si ya existe no falle
 # Openssl genera el certificado, nodes sirve para que el cifrado no se haga con contraseña
-# Keyut y out es la ruta donde va a guardar los certificados
-# O organizacion y OU unidad
+# Keyout y out es la ruta donde va a guardar los certificados
+# O organización y OU unidad
 RUN mkdir -p /etc/nginx/ssl && \
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /etc/nginx/ssl/inception.key \
     -out /etc/nginx/ssl/inception.crt \
     -subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=42/CN=aosset-o.42.fr"
 
-# Elimina el archhivo por defecto de nginx en el que escucha por el puerto 80
+# Elimina el archivo por defecto de nginx en el que escucha por el puerto 80
 RUN rm -f /etc/nginx/sites-enabled/default
 
-# Copia e contenido de mis archivos en los que usa nginx
+# Copia la configuración de nginx en la imagen de docker
 COPY conf/inception.conf /etc/nginx/conf.d/inception.conf
 
-# Pagina temporal (quitar cuando docker sea util)
+# Página temporal (quitar cuando docker sea util)
 RUN echo "<h1>Inception OK </h1>" > /var/www/html/index.html
 
 # Documenta el puerto que va a usar nginx pero no lo expone eso se hace en el .cnf

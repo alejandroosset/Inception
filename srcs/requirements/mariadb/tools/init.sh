@@ -1,8 +1,7 @@
 #!/bin/bash
 set -e
 
-# Crea la carpeta donde MariaDB guarda su socket 
-# (que es lo que le ayuda a comuncarse  con otros contenedores)
+# Crea la carpeta donde MariaDB guarda su socket (que es lo que le ayuda a comuncarse  con otros contenedores)
 mkdir -p /run/mysqld
 # Da permisos al usuario mysql sobre MariaDB
 chown -R mysql:mysql /run/mysqld /var/lib/mysql
@@ -18,7 +17,7 @@ if [ ! -d "/var/lib/mysql/${MYSQL_DATABASE}" ]; then
     until mysqladmin ping --silent 2>/dev/null; do
         sleep 1
     done
-    # Envia comandos a la base de datos, crea el usuario wordpress
+    # Envía comandos a la base de datos, crea el usuario wordpress
     # Le da permisos a sobre la base de datos y pone contraseña a root
     mysql -u root << EOSQL
 CREATE DATABASE IF  NOT EXISTS ${MYSQL_DATABASE};

@@ -5,7 +5,7 @@ set -e
 cd var/www/html
 
 # Espera a que MariaDB acepte conexiones
-until mysqladmin ping -h mariadb -u "${MTSQL_USER}" -p "${MYSQL_PASSWORD}" --silent 2>/dev/null; do
+until mysqladmin ping -h mariadb -u "${MYSQL_USER}" -p "${MYSQL_PASSWORD}" --silent 2>/dev/null; do
     echo "esperando MariaDB"
     sleep 2
 done
