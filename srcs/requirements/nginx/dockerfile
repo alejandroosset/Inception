@@ -21,8 +21,6 @@ RUN rm -f /etc/nginx/sites-enabled/default
 # Copia la configuración de nginx en la imagen de docker
 COPY conf/inception.conf /etc/nginx/conf.d/inception.conf
 
-# Página temporal (quitar cuando docker sea util)
-RUN echo "<h1>Inception OK </h1>" > /var/www/html/index.html
 
 # Documenta el puerto que va a usar nginx pero no lo expone eso se hace en el .cnf
 EXPOSE 443
