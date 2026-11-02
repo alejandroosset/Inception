@@ -151,11 +151,9 @@ More details are in [USER_DOC.md](USER_DOC.md) (usage) and [DEV_DOC.md](DEV_DOC.
 
 ### Use of AI
 
-Claude (Anthropic) was used as a learning and debugging assistant. It was used for:
+Claude was used as a learning and debugging assistant. It was used for:
 
 - Explaining Docker, Docker Compose, NGINX, TLS, PHP-FPM and MariaDB concepts.
-- Suggesting the folder structure and a first draft of the Dockerfiles, configuration files, initialisation scripts, `docker-compose.yml` and Makefile.
 - Helping to diagnose errors (typos in scripts, container restart loops, database connection problems, SSH/VM configuration).
-- Helping to structure this documentation.
 
 All generated content was reviewed, typed, tested and debugged manually, and I can explain every part of the project.
