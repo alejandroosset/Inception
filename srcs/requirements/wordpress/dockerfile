@@ -1,30 +1,30 @@
 FROM debian:bookworm
 
-# Actualiza los paquetes, instala nginx sin paquetes adicionales y borra la cache
+# Check add ons, install wordpress without them and deletes cache
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         php8.2-fpm php8.2-mysql php8.2-curl php8.2-mbstring php8.2-xml php8.2-gd php8.2-zip \
         mariadb-client curl ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-# Descarga WP-CLI desde github y lo guarda en una carpeta, luego le da permisos de ejecución al archivo permitiendo usarlo como wp
+# Downloads WP-CLI from github and stores it in a folder then it gives execution permission to the file so that we can use it as wordpress
 RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x /usr/local/bin/wp
 
-# Copia la configuración de php en la imagen de docker
+# Copy the configuration from wordpress to the docker image
 COPY conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 
-# Copia el script de inicialización de wordpress en la imagen
+# # Copy the setup script from wordpress to the docker image
 COPY tools/setup.sh /setup.sh
 
-# Hace ejecutable setup.sh y crea la carpeta si no existe
+# It makes setup.h executable and create the folder in case it does not exist
 RUN chmod +x /setup.sh && mkdir -p /var/www/html
 
-# Establece la carpeta como directorio por defecto para los comandos posteriores
+# Establishes the folder as default directory
 WORKDIR /var/www/html
 
-# Documenta el puerto que va a usar wordpress pero no lo expone eso se hace en el .cnf
+# Shows what port it is gonna be used
 EXPOSE 9000
 
-# Define setup.sh como comando principal que se ejecutará al iniciar el contenedor
+# Sets setup.sh as the main command to execute when we start the container
 CMD ["/setup.sh"]

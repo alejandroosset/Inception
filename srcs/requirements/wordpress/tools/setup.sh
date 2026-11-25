@@ -4,13 +4,13 @@ set -e
 
 cd /var/www/html
 
-# Espera a que MariaDB acepte conexiones
+# Waits for mariaDb to accept connections
 until mysqladmin ping -h mariadb -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" --silent 2>/dev/null; do
     echo "esperando MariaDB"
     sleep 2
 done
 
-# Solo instala wordpress la primera vez que se jecuta este archivo
+# Installs wordpress only the first time this file is executed
 if [ ! -f wp-config.php ]; then
     wp core download --allow-root
 
@@ -37,6 +37,6 @@ fi
 
 mkdir -p /run/php
 
-# Proceso principal (PID 1)
-# -F mantiene php en el primer plano y usamos 8.2 porque es el que trae bookworm.
+# Main process (PID 1)
+# -F keep php in foreground mode and we use 8.2 version because is the one that comes by default in debian bookworm.
 exec php-fpm8.2 -F

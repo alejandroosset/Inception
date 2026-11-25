@@ -1,29 +1,29 @@
 FROM debian:bookworm
 
-# Actualiza los paquetes, instala nginx sin paquetes adicionales y borra la cache
+# Check add ons, install nginx without them and deletes cache
 RUN apt-get update && \
     apt-get install -y --no-install-recommends nginx openssl && \
     rm -rf /var/lib/apt/lists/*
 
-# mkdir -p Crea la carpeta para los certificados, -p sirve para que si ya existe no falle
-# Openssl genera el certificado, nodes sirve para que el cifrado no se haga con contraseña
-# Keyout y out es la ruta donde va a guardar los certificados
-# O organización y OU unidad
+# mkdir -p creates a foldes for the certificates, -p is useful for when th folder already exists
+# openssl generates the certificate, nodes makes the certificate without using a password
+# Keyout and out is the route where the certificates go
+# O stands for organization and OU for unit
 RUN mkdir -p /etc/nginx/ssl && \
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /etc/nginx/ssl/inception.key \
     -out /etc/nginx/ssl/inception.crt \
     -subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=42/CN=aosset-o.42.fr"
 
-# Elimina el archivo por defecto de nginx en el que escucha por el puerto 80
+# Deletes the original nginx file
 RUN rm -f /etc/nginx/sites-enabled/default
 
-# Copia la configuración de nginx en la imagen de docker
+# Copy the configuration from nginx to the docker image
 COPY conf/inception.conf /etc/nginx/conf.d/inception.conf
 
 
-# Documenta el puerto que va a usar nginx pero no lo expone eso se hace en el .cnf
+# Shows what port it is gonna be used
 EXPOSE 443
 
-# Ejecuta esos comandos (daemon off sirve para que nginx se ejecute en primer plano)
+# Execute the commands (daemon of is useful to make nginx run in foreground mode)
 CMD ["nginx", "-g", "daemon off;"]
